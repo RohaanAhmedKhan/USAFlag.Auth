@@ -1,0 +1,24 @@
+{
+  "EasyCaching": {
+    "InMemory": {
+      "MaxRdSecond": 120,
+      "EnableLogging": false,
+      "LockMs": 5000,
+      "SleepMs": 300,
+      "DBConfig": {
+        "SizeLimit": 10000,
+        "ExpirationScanFrequency": 60,
+        "EnableReadDeepClone": true,
+        "EnableWriteDeepClone": false
+      }
+    }
+  },
+  "Memcached": {
+    "Servers": [
+      {
+        "Address": "127.0.0.1",
+        "Port": 11211
+      }
+    ]
+  }
+}

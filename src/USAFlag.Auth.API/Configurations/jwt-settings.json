@@ -1,0 +1,8 @@
+{
+  "JWTSettings": {
+    "Issuer": "USAFlag",
+    "AccessTokenExpireMinutes": "180",
+    "RefreshTokenExpireDays": "365",
+    "JWTSecretKey": "zWN2cUqzcfNoScCpGb57Wbnwm2P5YHtx6TfCxaiLw3l"
+  }
+}
