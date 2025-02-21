@@ -1,8 +1,8 @@
-﻿namespace Grid.Auth.Domain;
+﻿namespace USAFlag.Auth.Core.Domain;
 
 public class ValidationError
 {
-    public string PropertyName { get; set; }
-    public string ErrorMessage { get; set; }
-    public string ErrorCode { get; set; }
+    public string propertyName { get; set; }
+    public string errorMessage { get; set; }
+    public string errorCode { get; set; }
 }

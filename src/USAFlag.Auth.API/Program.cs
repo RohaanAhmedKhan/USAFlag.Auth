@@ -1,14 +1,15 @@
 
+using USAFlag.Auth.Infrastructure.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add multiple JSON configuration files
 AddMultipleJsonFiles(builder.Configuration);
 
-#region MadiatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-#endregion 
 
-#region "Health Checks"
+builder.Services.AddEasyCaching(options => { options.UseInMemory("default"); });
+
+ #region "Health Checks"
 builder.Services.AddHealthChecks();
 #endregion
 
@@ -22,12 +23,25 @@ builder.Services.AddAuthorization(opts =>
 #endregion
 
 #region "Setup DI"
+
+builder.Services.AddScoped<DbContext>();
+
 var ETIAssembly = Assembly.Load("USAFlag.Auth.Core");
+// Refister 
+builder.Services.RegisterAssemblyPublicNonGenericClasses(ETIAssembly)
+    .Where(x => x.Name.EndsWith("Service"))
+    .AsPublicImplementedInterfaces(ServiceLifetime.Scoped);
+
 // Register Repositories
 builder.Services.RegisterAssemblyPublicNonGenericClasses(ETIAssembly)
     .Where(x => x.Name.EndsWith("Repository"))
     .AsPublicImplementedInterfaces(ServiceLifetime.Scoped);
 #endregion
+
+#region MadiatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(ETIAssembly));
+#endregion
+
 
 #region ApiVersioning
 builder.Services.AddVersioning();
@@ -76,14 +90,11 @@ app.UseSwaggerUI(c =>
 #region "Error Handling"
 if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/error-local-development");
+    app.UseDeveloperExceptionPage();
 }
 else
 {
     app.UseExceptionHandler("/error");
-  
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
 }
 #endregion
 

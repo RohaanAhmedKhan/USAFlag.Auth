@@ -1,14 +1,14 @@
-﻿namespace USAFlag.Auth.API.Controllers.v1;
+namespace USAFlag.Auth.API.Controllers.v1;
 
 
 public abstract class BaseApiController : ControllerBase
 {
     private readonly IConfiguration config;
-    public int? UserId { get; set; }
-    public int? TenantId { get; set; }
-    public string TenantCode { get; set; }
-    public string AppCode { get; set; }
-    public int? RoleId { get; set; }
+    public int? userId { get; set; }
+    public int? tenantId { get; set; }
+    public string tenantCode { get; set; }
+    public string appCode { get; set; }
+    public int? roleId { get; set; }
 
     public BaseApiController(IConfiguration config)
     {
@@ -20,48 +20,10 @@ public abstract class BaseApiController : ControllerBase
     {
         if (User != null && User.Identity != null)
         {
-            UserId = User.Identity.GetUserId();
-            TenantId = User.Identity.GetTenantId();
-            RoleId = User.Identity.GetUserRoleId();
+            this.userId = User.Identity.GetUserId();
+            this.tenantId = User.Identity.GetTenantId();
+            this.roleId = User.Identity.GetUserRoleId();
         }
-    }
-
-    [NonAction]
-    protected ApiResponse BuildValidationErrorApiResponse(List<ValidationError> validationErrors)
-    {
-        return new ApiResponse
-        {
-            Response = validationErrors,
-            ErrorMessage = "Validation Errors",
-            StatusCode = 422,
-            Status = false,
-            Message = "Failed"
-        };
-    }
-
-    [NonAction]
-    protected ApiResponse BuildValidationErrorApiResponse(FluentValidation.Results.ValidationResult validationResult)
-    {
-        var validationErrors = new List<ValidationError>();
-        var errors = validationResult.Errors;
-        foreach (var error in errors)
-        {
-            validationErrors.Add(new ValidationError
-            {
-                ErrorCode = error.ErrorCode,
-                ErrorMessage = error.ErrorMessage,
-                PropertyName = error.PropertyName
-            });
-        }
-
-        return new ApiResponse
-        {
-            Response = validationErrors,
-            ErrorMessage = "Validation Errors",
-            StatusCode = 422,
-            Status = false,
-            Message = "Failed"
-        };
     }
 
     [NonAction]
@@ -84,31 +46,4 @@ public abstract class BaseApiController : ControllerBase
             aeskey.ToBytes()));
     }
 
-    [NonAction]
-    protected ApiResponse CreateSuccessApiResponse(object response,
-        HttpStatusCode statusCode = HttpStatusCode.OK, string message = "Success")
-    {
-        return new ApiResponse
-        {
-            Response = response,
-            ErrorMessage = "",
-            StatusCode = (int)statusCode,
-            Status = true,
-            Message = message
-        };
-    }
-
-    [NonAction]
-    protected ApiResponse CreateFailedApiResponse(object response,
-        HttpStatusCode statusCode, string errorMessage)
-    {
-        return new ApiResponse
-        {
-            Response = response,
-            ErrorMessage = errorMessage,
-            StatusCode = (int)statusCode,
-            Status = false,
-            Message = "Failed"
-        };
-    }
 }

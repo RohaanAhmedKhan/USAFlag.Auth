@@ -1,11 +1,11 @@
-﻿namespace Grid.Auth.Service.Response;
+namespace USAFlag.Auth.Contracts.Response;
 
 public class BaseResponse
 { 
-    public int CreatedBy { get; set; }
-    public DateTime CreatedDate { get; set; }
-    public int TenantId { get; set; }
-    public int? ModifiedBy { get; set; }
-    public DateTime? ModifiedDate { get; set; }
-    public bool Active { get; set; }
+    public int createdBy { get; set; }
+    public DateTime createdDate { get; set; }
+    public int tenantId { get; set; }
+    public int? modifiedBy { get; set; }
+    public DateTime? modifiedDate { get; set; }
+    public bool active { get; set; }
 }

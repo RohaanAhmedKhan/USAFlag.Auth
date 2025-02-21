@@ -1,9 +1,9 @@
-﻿namespace Grid.Auth.Domain;
+﻿namespace USAFlag.Auth.Core.Domain;
 
 public class JWTSettings
 {
-    public string Issuer { get; set; }
-    public string AccessTokenExpireMinutes { get; set; }
-    public string RefreshTokenExpireDays { get; set; }
-    public string JWTSecretKey { get; set; }
+    public string issuer { get; set; }
+    public string accessTokenExpireMinutes { get; set; }
+    public string refreshTokenExpireDays { get; set; }
+    public string jwtSecretKey { get; set; }
 }

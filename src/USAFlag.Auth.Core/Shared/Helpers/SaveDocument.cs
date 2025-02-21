@@ -1,4 +1,4 @@
-namespace USAFlag.Auth.Core.Application.Helpers;
+namespace USAFlag.Auth.Core.Shared.Helpers;
 public static class SaveDocument
 {
     private const string rootPath = "wwwroot";

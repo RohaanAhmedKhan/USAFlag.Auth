@@ -1,14 +1,12 @@
 ﻿using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace USAFlag.Auth.Core.Infrastructure.Persistence.Email
 {
     public interface IEmailService
     {
         Task<Response> SendEmail(string apiKey, string subject,
-            string message, List<string> emails, string fromMail);
+            string message, List<string> emails, string fromEmail);
     }
 
     public class EmailService : IEmailService
@@ -35,7 +33,7 @@ namespace USAFlag.Auth.Core.Infrastructure.Persistence.Email
             }
             catch (System.Exception)
             {
-                throw ;
+                throw;
             }
         }
     }

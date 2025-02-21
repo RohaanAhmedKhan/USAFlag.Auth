@@ -1,5 +1,0 @@
-{
-    "dotnet.defaultSolution": "Grid.AuthWebAPI.sln",
-    "pieces.cloudCapabilities": "Blended",
-    "pieces.telemetry": true
-}
