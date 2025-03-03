@@ -7,7 +7,7 @@ namespace USAFlag.Auth.API.Controllers.v1;
 public class AccountController(IConfiguration config, IMediator mediator) : BaseApiController(config)
 {
 
-    [HttpPost]
+    [HttpPost("createuser")]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         //ResolveUserIdentity();

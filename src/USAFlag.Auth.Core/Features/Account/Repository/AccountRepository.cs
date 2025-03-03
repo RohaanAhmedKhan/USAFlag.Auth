@@ -1,5 +1,3 @@
-﻿using Dapper;
-
 namespace USAFlag.Auth.Core.Features.Account.Repository;
 
 public interface IAccountRepository
@@ -11,29 +9,18 @@ public class AccountRepository(DbContext dbContext) : IAccountRepository, IBaseR
 {
     public async Task<StoredProcedureResponse> CreateUser(CreateUserRequest request, CancellationToken cancellationToken)
     {
-        const string procedure = $"CALL auth.sp_create_user(@userName, @emailAddress, @password, @result);";
+        StoredProcedureResponse spResponse = new();
 
+        const string storedProcedure = "auth.sp_create_user";
         var parameters = new DynamicParameters();
-        parameters.Add("emailaddress", "test1@example.com", DbType.String);
-        parameters.Add("password", "secuaare_password", DbType.String);
-        parameters.Add("username", "tesaat_user", DbType.String);
+        parameters.Add("emailaddress", request?.emailAddress, DbType.String);
+        parameters.Add("password", request?.password, DbType.String);
+        parameters.Add("username", request?.userName, DbType.String);
 
-        // Call the procedure
-        int result = await dbContext.ExecuteStoredProcedureAsync<int>("auth.sp_create_user", parameters);
+        spResponse.ReturnValue = await dbContext.ExecuteStoredProcedureAsync<int>(storedProcedure, parameters, cancellationToken);
 
-        return new StoredProcedureResponse
-        {
-            NewId = 123,
-            OtherData = null,
-            ReturnValue = result
-        };
+        return spResponse;
     }
 
 
-    // Call the stored procedure to get a user by ID and return the user object
-    //public async Task<User> GetUserByIdAsync(int id)
-    //{
-    //    const string procedureName = "get_user_by_id";
-    //    return await _dbContext.ExecuteStoredProcedureAsync<User>(procedureName, new { UserId = id });
-    //}
 }

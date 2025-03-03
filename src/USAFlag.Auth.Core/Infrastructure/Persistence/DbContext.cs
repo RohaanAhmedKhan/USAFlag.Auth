@@ -1,4 +1,4 @@
-﻿namespace USAFlag.Auth.Infrastructure.Persistence;
+namespace USAFlag.Auth.Infrastructure.Persistence;
 
 public class DbContext
 {
@@ -16,17 +16,16 @@ public class DbContext
         return connection;
     }
 
-    public async Task<TResponse> ExecuteStoredProcedureAsync<TResponse>(string procedureName, DynamicParameters parameters)
+    public async Task<TResponse> ExecuteStoredProcedureAsync<TResponse>(string procedureName, DynamicParameters parameters, CancellationToken cancellationToken)
     {
         using var connection = await CreateOpenConnectionAsync();
         using var transaction = await connection.BeginTransactionAsync();
         try
         {
-            // Add OUT parameters
             parameters.Add("result", 0, DbType.Int32, ParameterDirection.InputOutput);
 
             await connection.ExecuteAsync(
-                "auth.sp_create_user",
+                procedureName,
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
@@ -42,33 +41,4 @@ public class DbContext
         }
     }
 
-        public async Task<int> ExecuteStoredProcedureAsync_working(string procedureName, DynamicParameters parameters)
-    {
-        using var connection = await CreateOpenConnectionAsync();
-        using var transaction = await connection.BeginTransactionAsync();
-        try
-        {
-          
-            parameters.Add("result", 0, DbType.Int32, ParameterDirection.InputOutput); // INOUT parameter
-
-            // Use CALL statement explicitly
-            await connection.ExecuteAsync(
-                "CALL auth.sp_create_user(@emailaddress, @password, @username, @result)",
-                parameters,
-                transaction,
-                commandType: CommandType.Text
-            );
-
-            await transaction.CommitAsync();
-
-            // Retrieve the INOUT parameter
-            return parameters.Get<int>("result");
-        }
-        catch (Exception ex)
-        {
-            await transaction.RollbackAsync();
-            //_logger.LogError(ex, "Error executing stored procedure");
-            throw;
-        }
-    }
 }

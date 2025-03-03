@@ -1,0 +1,10 @@
+### Create User Request
+POST https://localhost:61391/api/v1/account/createuser
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userName": "Rohaan",
+  "emailAddress": "Rohaan@gmail.com",
+  "password": "1234567"
+}

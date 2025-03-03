@@ -1,4 +1,5 @@
 
+using System.Threading.RateLimiting;
 using USAFlag.Auth.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,7 @@ AddMultipleJsonFiles(builder.Configuration);
 
 builder.Services.AddEasyCaching(options => { options.UseInMemory("default"); });
 
- #region "Health Checks"
+ #region Health Checks
 builder.Services.AddHealthChecks();
 #endregion
 
@@ -42,6 +43,19 @@ builder.Services.RegisterAssemblyPublicNonGenericClasses(ETIAssembly)
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(ETIAssembly));
 #endregion
 
+#region Rate Limiter
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("fixed", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.User.Identity?.Name,
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100,
+                Window = TimeSpan.FromMinutes(1)
+            }));
+});
+#endregion
 
 #region ApiVersioning
 builder.Services.AddVersioning();
@@ -175,3 +189,5 @@ void ConfigSwagger(IServiceCollection services)
         });
     });
 }
+
+public partial class Program { }

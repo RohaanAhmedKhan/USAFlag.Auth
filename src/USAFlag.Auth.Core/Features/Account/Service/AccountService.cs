@@ -1,4 +1,4 @@
-﻿namespace USAFlag.Auth.Core.Shared.Services.Account;
+namespace USAFlag.Auth.Core.Shared.Services.Account;
 
 public interface IAccountService
 {

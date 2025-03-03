@@ -1,4 +1,4 @@
-﻿namespace USAFlag.Auth.Core.Features.Account.Commands;
+namespace USAFlag.Auth.Core.Features.Account.Commands;
 
 public class CreateUserCommandHandler(IAccountService accountService) : IRequestHandler<GenericCommand<CreateUserRequest>, ApiResponse> 
 {
@@ -10,7 +10,6 @@ public class CreateUserCommandHandler(IAccountService accountService) : IRequest
         {
             var response = await accountService.CreateUser(command.request, cancellationToken);
 
-            // Handle the response
             switch (response.ReturnValue)
             {
                 case 0:
@@ -33,4 +32,3 @@ public class CreateUserCommandHandler(IAccountService accountService) : IRequest
         return apiResponse;
     }
 }
- 
